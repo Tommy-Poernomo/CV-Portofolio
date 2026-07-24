@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tommy Poernomo - Web Curriculum Vitae</title>
+    <title>Tommy Poernomo - Web Curriculum Vitae & Portfolio</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Explore Web Development projects and professional CV of Tommy Poernomo">
+    <meta name="keywords" content="Tommy Poernomo, web developer, software engineer, portfolio, projects, CV">
+    <meta name="author" content="Tommy Poernomo">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         /* Custom Glassmorphism Styles */
         .glass-card {
@@ -75,10 +83,17 @@
             border-top: 2px solid transparent;
             border-left: 2px solid transparent;
         }
+
+        /* Tab Active State Style */
+        .tab-btn.active {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: rgba(6, 182, 212, 0.5);
+            color: #22d3ee;
+        }
     </style>
 
-    <!-- Script Gabungan Disatukan dalam DOMContentLoaded -->
-<script>
+    <!-- Script JavaScript Disatukan dalam DOMContentLoaded -->
+    <script>
         document.addEventListener("DOMContentLoaded", () => {
             // 1. ANIMASI TYPING EFFECT
             const textElement = document.getElementById("typing-text");
@@ -127,7 +142,7 @@
             const frame = document.getElementById('focus-frame');
 
             let currentIndex = 0;
-            let direction = 1; // 1 = ke kanan, -1 = ke kiri
+            let direction = 1;
             let autoMoveInterval = null;
 
             function moveFrame(element) {
@@ -156,25 +171,22 @@
                 });
             }
 
-            // Fungsi untuk menggerakkan bingkai secara otomatis (bolak-balik)
             function startAutoMove() {
                 if (autoMoveInterval) clearInterval(autoMoveInterval);
 
                 autoMoveInterval = setInterval(() => {
                     if (targets.length === 0) return;
 
-                    // Pindahkan bingkai ke elemen aktif
                     moveFrame(targets[currentIndex]);
 
-                    // Tentukan indeks berikutnya
                     if (currentIndex === targets.length - 1) {
-                        direction = -1; // Capai paling kanan -> balik arah ke kiri
+                        direction = -1;
                     } else if (currentIndex === 0) {
-                        direction = 1;  // Capai paling kiri -> balik arah ke kanan
+                        direction = 1;
                     }
 
                     currentIndex += direction;
-                }, 1800); // Bergerak otomatis setiap 1.8 detik
+                }, 1800);
             }
 
             function stopAutoMove() {
@@ -184,25 +196,40 @@
                 }
             }
 
-            // Event handler saat kursor masuk ke opsi target
             targets.forEach((target, index) => {
                 target.addEventListener('mouseenter', () => {
-                    stopAutoMove(); // Hentikan pergerakan otomatis
-                    currentIndex = index; // Update indeks ke target yang di-hover
+                    stopAutoMove();
+                    currentIndex = index;
                     moveFrame(target);
                 });
             });
 
-            // Jalankan kembali otomatis saat kursor keluar dari area container
-            container.addEventListener('mouseleave', () => {
-                startAutoMove();
-            });
+            if (container) {
+                container.addEventListener('mouseleave', () => {
+                    startAutoMove();
+                });
+            }
 
-            // Inisialisasi awal
             if (targets.length > 0) {
                 moveFrame(targets[0]);
                 startAutoMove();
             }
+
+            // 3. TAB SYSTEM FOR PROJECTS
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabContents.forEach(content => content.classList.add('hidden'));
+
+                    button.classList.add('active');
+                    document.getElementById(targetTab).classList.remove('hidden');
+                });
+            });
         });
     </script>
 </head>
@@ -214,13 +241,14 @@
     <div class="fixed top-[40%] right-[20%] w-[350px] h-[350px] bg-indigo-500/15 rounded-full blur-[100px] pointer-events-none"></div>
 
     <!-- Navigation Header -->
-    <header class="fixed top-0 left-0 w-full z-50 glass-nav">
+    <header class="fixed top-0 left-0 w-full z-50 glass-nav" role="banner">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="#about" class="text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+            <a href="#about" class="text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500" aria-label="Homepage of Tommy Poernomo">
                 Tommy Poernomo.
             </a>
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300" aria-label="Main Navigation">
                 <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
+                <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
                 <a href="#experience" class="hover:text-cyan-400 transition-colors">Pengalaman</a>
                 <a href="#education" class="hover:text-cyan-400 transition-colors">Education</a>
                 <a href="#skills" class="hover:text-cyan-400 transition-colors">Keahlian</a>
@@ -233,7 +261,7 @@
     </header>
 
     <!-- Main Container -->
-    <main class="max-w-4xl mx-auto px-4 pt-24 pb-16 space-y-8 relative z-10">
+    <main id="main-content" class="max-w-4xl mx-auto px-4 pt-24 pb-16 space-y-8 relative z-10" role="main">
 
         <!-- PROFILE HERO CARD -->
         <section id="about" class="glass-card rounded-2xl overflow-hidden">
@@ -337,7 +365,7 @@
                     </div>
                     <div class="flex items-center gap-2 mt-2 sm:mt-0">
                         <span class="text-xs font-medium text-cyan-400 glass-pill px-3 py-1 rounded-full border border-cyan-500/20">Graduated</span>
-                        <span class="text-xs font-medium text-cyan-400 glass-pill px-3 py-1 rounded-full border border-cyan-500/20">Sep 2024 - Aug 2008</span>
+                        <span class="text-xs font-medium text-cyan-400 glass-pill px-3 py-1 rounded-full border border-cyan-500/20">Sep 2004 - Aug 2008</span>
                     </div>
                 </div>
             </div>
@@ -359,18 +387,18 @@
                         <h3 class="text-lg font-semibold text-white">Head of DKV Laboratory</h3>
                         <p class="text-sm text-cyan-400 font-medium">SMKN 1 Berau</p>
                         <p class="text-xs text-slate-400 mt-0.5 mb-3">Jul 2021 - Present · Full-time</p>
-                        <p class="text-slate-300 text-sm leading-relaxed">
+                        <div class="text-slate-300 text-sm leading-relaxed">
                             <ul class="list-disc pl-5 space-y-1">
                                 <li>Handled routine hardware maintenance and software updates on lab computers, minimizing technical glitches and preventing interruptions during practical exams or classes.</li>
-                                <li>Supervised the daily schedule and access rules for the DKV lab, ensuring different classes and student groups could practice smoothly without any resource conflicts. </li>
-                                <li>Assessed lab hardware performance and recommended technical upgrades when needed, helping the school make informed choices on purchasing reliable parts like RAM and storage. </li>
+                                <li>Supervised the daily schedule and access rules for the DKV lab, ensuring different classes and student groups could practice smoothly without any resource conflicts.</li>
+                                <li>Assessed lab hardware performance and recommended technical upgrades when needed, helping the school make informed choices on purchasing reliable parts like RAM and storage.</li>
                                 <li>Maintained the lab's local network stability to ensure seamless file-sharing between student computers and the main instructor PC, speeding up the assignment collection process.</li>
-                            </ul>                        
-                        </p>
+                            </ul>                       
+                        </div>
                     </div>
                 </div>
 
-<div class="relative pl-10 group">
+                <div class="relative pl-10 group">
                     <div class="absolute left-0 top-1.5 w-7 h-7 rounded-full glass-pill border border-cyan-400/50 flex items-center justify-center group-hover:scale-110 transition-transform bg-slate-950">
                         <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
                     </div>
@@ -378,14 +406,14 @@
                         <h3 class="text-lg font-semibold text-white">Competency Test Assessor (Asesor UKK/USK)</h3>
                         <p class="text-sm text-cyan-400 font-medium">SMKN 1 Berau</p>
                         <p class="text-xs text-slate-400 mt-0.5 mb-3">Dec 2022 - Present · Seasonal</p>
-                        <p class="text-slate-300 text-sm leading-relaxed">
+                        <div class="text-slate-300 text-sm leading-relaxed">
                             <ul class="list-disc pl-5 space-y-1">
-                                <li>Evaluated student practical exams based on national competency standards for "Junior Photographer" and "Junior Graphic Design Operator" occupations, ensuring all passing students met real-world industry requirements. </li>
-                                <li>Conducted fair and objective grading on students' digital imaging portfolios and technical photography setups, maintaining a high standard of integrity throughout the certification process. </li>
-                                <li>Reviewed and simulated real-world design and photography briefs for the exam, giving students a practical test environment that closely mirrored client expectations in the creative industry. </li>
-                                <li>Evaluated students' work ethics, safety compliance (K3), and equipment handling during practical sessions, instilling professional workplace habits required by major creative agencies.  </li>
-                            </ul>                        
-                        </p>
+                                <li>Evaluated student practical exams based on national competency standards for "Junior Photographer" and "Junior Graphic Design Operator" occupations, ensuring all passing students met real-world industry requirements.</li>
+                                <li>Conducted fair and objective grading on students' digital imaging portfolios and technical photography setups, maintaining a high standard of integrity throughout the certification process.</li>
+                                <li>Reviewed and simulated real-world design and photography briefs for the exam, giving students a practical test environment that closely mirrored client expectations in the creative industry.</li>
+                                <li>Evaluated students' work ethics, safety compliance (K3), and equipment handling during practical sessions, instilling professional workplace habits required by major creative agencies.</li>
+                            </ul>                       
+                        </div>
                     </div>
                 </div>
 
@@ -397,18 +425,14 @@
                         <h3 class="text-lg font-semibold text-white">Head of DKV</h3>
                         <p class="text-sm text-cyan-400 font-medium">SMKN 1 Berau</p>
                         <p class="text-xs text-slate-400 mt-0.5 mb-3">Jul 2014 - Jun 2024 · Full-time</p>
-                        <p class="text-slate-300 text-sm leading-relaxed">
+                        <div class="text-slate-300 text-sm leading-relaxed">
                             <ul class="list-disc pl-5 space-y-1">
                                 <li>Managed the distribution of teaching hours for DKV teachers, ensuring full compliance with national education requirements and zero scheduling conflicts throughout the academic year.</li>
-                                <li> 
-Coordinated with local creative industries to secure internship (PKL) placements, matching each student’s technical skills and character with company demands to achieve a high internship completion rate. </li>
-                                <li>
-Collaborated with the Vice Principal of Curriculum to synchronize course materials with local industry standards, keeping the DKV learning modules relevant to current professional trends. </li>
-                                <li>
-Assessed and proposed the annual budget for practical tools and materials, ensuring students always had the necessary resources and equipment for their daily/weekly/monhtly projects. 
-</li>
-                            </ul>                        
-                        </p>
+                                <li>Coordinated with local creative industries to secure internship (PKL) placements, matching each student’s technical skills and character with company demands to achieve a high internship completion rate.</li>
+                                <li>Collaborated with the Vice Principal of Curriculum to synchronize course materials with local industry standards, keeping the DKV learning modules relevant to current professional trends.</li>
+                                <li>Assessed and proposed the annual budget for practical tools and materials, ensuring students always had the necessary resources and equipment for their daily/weekly/monthly projects.</li>
+                            </ul>                       
+                        </div>
                     </div>
                 </div>
 
@@ -420,15 +444,111 @@ Assessed and proposed the annual budget for practical tools and materials, ensur
                         <h3 class="text-lg font-semibold text-white">IT/Graphic Design Educator</h3>
                         <p class="text-sm text-cyan-400 font-medium">SMKN 1 Berau</p>
                         <p class="text-xs text-slate-400 mt-0.5 mb-3">Jul 2012 - Present · Full-time</p>
-                        <p class="text-slate-300 text-sm leading-relaxed">
+                        <div class="text-slate-300 text-sm leading-relaxed">
                             <ul class="list-disc pl-5 space-y-1">
-                                <li>Monitored student attendance and daily lab discipline, fostering a professional work ethic and accountability that prepared students for the actual workplace environment. </li>
-                                <li>Taught core DKV subjects, including graphic design and photography, which equipped students with the essential technical skills needed to clear their internship (PKL) requirements. </li>
-                                <li>Developed structured learning materials and student worksheets (LKPD) based on industry-standard software like Adobe Photoshop, resulting in higher student engagement during practical lab sessions. </li>
-                                <li>Integrated real-world design briefs into classroom assignments, giving students a realistic understanding of client demands and professional deadlines. </li>
-                            </ul>                        
-                        </p>
+                                <li>Monitored student attendance and daily lab discipline, fostering a professional work ethic and accountability that prepared students for the actual workplace environment.</li>
+                                <li>Taught core DKV subjects, including graphic design and photography, which equipped students with the essential technical skills needed to clear their internship (PKL) requirements.</li>
+                                <li>Developed structured learning materials and student worksheets (LKPD) based on industry-standard software like Adobe Photoshop, resulting in higher student engagement during practical lab sessions.</li>
+                                <li>Integrated real-world design briefs into classroom assignments, giving students a realistic understanding of client demands and professional deadlines.</li>
+                            </ul>                       
+                        </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION (MERGED & GLASSMORPHISM TABBED VERSION) -->
+        <section id="projects" class="glass-card rounded-2xl p-6 md:p-8 space-y-6" aria-labelledby="projects-heading">
+            <div class="space-y-2">
+                <h2 id="projects-heading" class="text-xl font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-laptop-code text-cyan-400"></i>
+                    Project Experiences
+                </h2>
+                <p class="text-slate-400 text-sm">Below are some of the web projects I’ve worked on.</p>
+            </div>
+
+            <!-- Tab Navigation Buttons -->
+            <div class="flex flex-wrap gap-3 border-b border-white/10 pb-4">
+                <button class="tab-btn active glass-pill px-4 py-2 rounded-xl text-xs font-semibold transition-all border border-white/10 hover:border-cyan-400/50" data-tab="dkv-lms-project">
+                    <i class="fa-solid fa-graduation-cap mr-1.5"></i> DKV Learning Management System (LMS)
+                </button>
+                <button class="tab-btn glass-pill px-4 py-2 rounded-xl text-xs font-semibold transition-all border border-white/10 hover:border-cyan-400/50" data-tab="revoshop-project">
+                    <i class="fa-solid fa-shopping-cart mr-1.5"></i> RevoShop
+                </button>
+                                <button class="tab-btn glass-pill px-4 py-2 rounded-xl text-xs font-semibold transition-all border border-white/10 hover:border-cyan-400/50" data-tab="revogames-project">
+                    <i class="fa-solid fa-gamepad mr-1.5"></i> RevoGames
+                </button>
+            </div>
+
+            <!-- Tab Content 1: DKV Learning Management System (LMS) -->
+            <div id="dkv-lms-project" class="tab-content transition-all duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <figure class="overflow-hidden rounded-xl border border-white/10 glass-card">
+                        <img src="preview/preview-dkv-lms.png" alt="Preview of DKV Learning Management System (LMS)" loading="lazy" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-500">
+                        <figcaption class="text-xs text-center text-slate-400 py-2 border-t border-white/5 bg-slate-950/40">DKV Learning Management System (LMS)</figcaption>
+                    </figure>
+
+                    <article class="space-y-4">
+                        <h3 class="text-lg font-semibold text-white">DKV Learning Management System (LMS)</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            This Learning Management System (LMS) is an online educational platform tailored specifically for Visual Communication Design (DKV) students to streamline classroom activities and assignment workflows. Developed using Next.js on the frontend, Nest.js on the backend, and MySQL via Prisma.
+                        </p>
+                        <div>
+                            <a href="https://github.com/Tommy-Poernomo/crack-fe-Tommy-Poernomo" 
+                               target="_blank" rel="noopener noreferrer" 
+                               class="inline-flex items-center gap-2 glass-pill px-4 py-2.5 rounded-xl text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500/40 text-xs font-medium transition-all">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open DKV Learning Management System (LMS)
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Tab Content 2: RevoShop -->
+            <div id="revoshop-project" class="tab-content hidden transition-all duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <figure class="overflow-hidden rounded-xl border border-white/10 glass-card">
+                        <img src="preview/preview-revoshop.png" alt="Preview of RevoShop" loading="lazy" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-500">
+                        <figcaption class="text-xs text-center text-slate-400 py-2 border-t border-white/5 bg-slate-950/40">RevoShop</figcaption>
+                    </figure>
+
+                    <article class="space-y-4">
+                        <h3 class="text-lg font-semibold text-white">RevoShop</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            RevoShop is a product management and e-commerce backend platform built to ensure efficient, secure, and scalable data handling for online retail operations. Developed using Nest.js, TypeScript, and a relational database, the project emphasizes back-end reliability, clean API design, and strict code quality. Don't hesitate to open it.
+                        </p>
+                        <div>
+                            <a href="https://github.com/Revou-FSSE-Oct25/milestone-3-tommypoernomo" 
+                               target="_blank" rel="noopener noreferrer" 
+                               class="inline-flex items-center gap-2 glass-pill px-4 py-2.5 rounded-xl text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500/40 text-xs font-medium transition-all">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open RevoShop
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
+            <!-- Tab Content 3: RevoGames -->
+            <div id="revogames-project" class="tab-content hidden transition-all duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <figure class="overflow-hidden rounded-xl border border-white/10 glass-card">
+                        <img src="preview/preview-revogames.png" alt="Preview of RevoGames" loading="lazy" class="w-full h-48 object-cover hover:scale-105 transition-transform duration-500">
+                        <figcaption class="text-xs text-center text-slate-400 py-2 border-t border-white/5 bg-slate-950/40">RevoGames</figcaption>
+                    </figure>
+
+                    <article class="space-y-4">
+                        <h3 class="text-lg font-semibold text-white">RevoGames</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            RevoGames is an interactive dashboard and utility web application designed to track user statistics, game data, and metrics through a clean visual interface. Built using Next.js and modern frontend technologies, the platform emphasizes real-time data rendering, performance optimization, and intuitive navigation. C'mon, play it.
+                        </p>
+                        <div>
+                            <a href="https://revou-fsse-oct25.github.io/milestone-2-Tommy-Poernomo/" 
+                               target="_blank" rel="noopener noreferrer" 
+                               class="inline-flex items-center gap-2 glass-pill px-4 py-2.5 rounded-xl text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500/40 text-xs font-medium transition-all">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open RevoGames
+                            </a>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
@@ -469,30 +589,37 @@ Assessed and proposed the annual budget for practical tools and materials, ensur
         </section>
 
         <!-- FOOTER / CONTACT -->
-        <footer id="contact" class="glass-card rounded-2xl p-6 md:p-8 text-center space-y-6">
+        <footer id="contact" class="glass-card rounded-2xl p-6 md:p-8 text-center space-y-6" role="contentinfo">
             <div class="max-w-md mx-auto space-y-2">
                 <h2 class="text-2xl font-bold text-white">Mari Terhubung</h2>
                 <p class="text-sm text-slate-400">Terbuka untuk diskusi proyek, kolaborasi, maupun peluang kerja profesional.</p>
             </div>
 
             <div class="flex justify-center gap-4">
-                <a href="https://www.linkedin.com/in/tommy-poernomo/" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.linkedin.com/in/tommy-poernomo/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile"
                    class="glass-pill p-3 rounded-xl hover:bg-cyan-500/20 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all">
                     <i class="fa-brands fa-linkedin text-xl"></i>
                 </a>
-                <a href="mailto:tommy.poernomo@gmail.com" 
+                <a href="mailto:tommy.poernomo@gmail.com" aria-label="Tommy Poernomo e-mail"
                    class="glass-pill p-3 rounded-xl hover:bg-cyan-500/20 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all">
                     <i class="fa-solid fa-envelope text-xl"></i>
                 </a>
-                <a href="https://github.com/Tommy-Poernomo/" target="_blank" rel="noopener noreferrer"
+                <a href="https://github.com/Tommy-Poernomo/" target="_blank" rel="noopener noreferrer" aria-label="Github Profile"
                    class="glass-pill p-3 rounded-xl hover:bg-cyan-500/20 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all">
                     <i class="fa-brands fa-github text-xl"></i>
                 </a>
+                <a href="https://web.facebook.com/tommy.poernomo" target="_blank" rel="noopener noreferrer" aria-label="Facebook Profile"
+                   class="glass-pill p-3 rounded-xl hover:bg-cyan-500/20 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all">
+                    <i class="fa-brands fa-facebook text-xl"></i>
+                </a>
             </div>
 
-            <p class="text-xs text-slate-500 border-t border-white/5 pt-6">
-                © 2026 Tommy Poernomo. Built with HTML & Tailwind CSS.
-            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-between border-t border-white/5 pt-6 text-xs text-slate-500 gap-4">
+                <p>© 2026 <strong>Tommy Poernomo</strong>. All rights reserved.</p>
+                <button type="button" class="glass-pill px-4 py-2 rounded-full hover:text-cyan-400 transition-all" onclick="window.scrollTo({top:0, behavior:'smooth'});" aria-label="Back to Top">
+                    <i class="fa-solid fa-arrow-up mr-1"></i> Back to top
+                </button>
+            </div>
         </footer>
 
     </main>
