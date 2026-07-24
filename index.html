@@ -6,8 +6,7 @@
     <title>Tommy Poernomo - Web Curriculum Vitae</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         /* Custom Glassmorphism Styles */
         .glass-card {
@@ -32,55 +31,56 @@
         }
         
         .typing-container {
-        font-family: monospace;
-        font-size: 1.5rem;
-        color: #06b6d4; /* Warna cyan */
-    }
+            font-family: monospace;
+            font-size: 1.5rem;
+            color: #06b6d4; /* Warna cyan */
+        }
 
-    /* Efek kedip pada kursor */
-    .cursor {
-        display: inline-block;
-        animation: blink 0.7s infinite;
-    }
+        /* Efek kedip pada kursor */
+        .cursor {
+            display: inline-block;
+            animation: blink 0.7s infinite;
+        }
 
-    @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-    }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Membuat Efek Garis Siku pada 4 Sudut Frame */
+        .corner-box {
+            position: absolute;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Sudut Kiri-Atas */
+        .corner-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-top: 2px solid #06b6d4;
+            border-left: 2px solid #06b6d4;
+            border-bottom: 2px solid transparent;
+            border-right: 2px solid transparent;
+        }
+
+        /* Sudut Kanan-Bawah */
+        .corner-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-bottom: 2px solid #06b6d4;
+            border-right: 2px solid #06b6d4;
+            border-top: 2px solid transparent;
+            border-left: 2px solid transparent;
+        }
     </style>
-    <script>
-//         const textElement = document.getElementById("typing-text");
-// const textToType = "Hello, I'm Tommy Poernomo, welcome to my Portfolio";
-// let index = 0;
 
-// function typeEffect() {
-//     if (index < textToType.length) {
-//         textElement.textContent += textToType.charAt(index);
-//         index++;
-//         setTimeout(typeEffect, 80); // Kecepatan mengetik (ms)
-//     }
-// }
-
-// // Jalankan fungsi saat halaman selesai dimuat
-// document.addEventListener("DOMContentLoaded", typeEffect);
-
-// document.addEventListener("DOMContentLoaded", () => {
-//             const textElement = document.getElementById("typing-text");
-//             const textToType = "Hello, I'm Tommy Poernomo, welcome to my Portfolio";
-//             let index = 0;
-
-//             function typeEffect() {
-//                 if (textElement && index < textToType.length) {
-//                     textElement.textContent += textToType.charAt(index);
-//                     index++;
-//                     setTimeout(typeEffect, 80); // Kecepatan mengetik (ms)
-//                 }
-//             }
-
-//             typeEffect();
-//         });
-
+    <!-- Script Gabungan Disatukan dalam DOMContentLoaded -->
+<script>
         document.addEventListener("DOMContentLoaded", () => {
+            // 1. ANIMASI TYPING EFFECT
             const textElement = document.getElementById("typing-text");
             const phrases = [
                 "Hello, I'm Tommy Poernomo",
@@ -97,36 +97,113 @@
                 const currentPhrase = phrases[phraseIndex];
 
                 if (isDeleting) {
-                    // Proses Menghapus
                     textElement.textContent = currentPhrase.substring(0, charIndex - 1);
                     charIndex--;
                 } else {
-                    // Proses Mengetik
                     textElement.textContent = currentPhrase.substring(0, charIndex + 1);
                     charIndex++;
                 }
 
-                // Kecepatan default: Mengetik (100ms), Menhapus (50ms)
                 let typingSpeed = isDeleting ? 50 : 100;
 
-                // Jika kalimat selesai diketik penuh
                 if (!isDeleting && charIndex === currentPhrase.length) {
-                    typingSpeed = 2000; // Tahan selama 2 detik sebelum mulai menghapus
+                    typingSpeed = 2000;
                     isDeleting = true;
                 } 
-                // Jika kalimat selesai dihapus total
                 else if (isDeleting && charIndex === 0) {
                     isDeleting = false;
-                    phraseIndex = (phraseIndex + 1) % phrases.length; // Pindah ke kalimat berikutnya
-                    typingSpeed = 500; // Jeda sebentar sebelum mengetik kalimat baru
+                    phraseIndex = (phraseIndex + 1) % phrases.length;
+                    typingSpeed = 500;
                 }
 
                 setTimeout(typeEffect, typingSpeed);
             }
 
             typeEffect();
+
+            // 2. ANIMASI FOCUS FRAME SIKU (AUTO MOVE + HOVER PAUSE)
+            const container = document.getElementById('target-container');
+            const targets = document.querySelectorAll('.role-target');
+            const frame = document.getElementById('focus-frame');
+
+            let currentIndex = 0;
+            let direction = 1; // 1 = ke kanan, -1 = ke kiri
+            let autoMoveInterval = null;
+
+            function moveFrame(element) {
+                if (!container || !frame || !element) return;
+
+                const containerRect = container.getBoundingClientRect();
+                const rect = element.getBoundingClientRect();
+
+                const top = rect.top - containerRect.top;
+                const left = rect.left - containerRect.left;
+
+                frame.style.top = `${top}px`;
+                frame.style.left = `${left}px`;
+                frame.style.width = `${rect.width}px`;
+                frame.style.height = `${rect.height}px`;
+                frame.style.opacity = '1';
+
+                targets.forEach(target => {
+                    if (target === element) {
+                        target.style.filter = 'blur(0px)';
+                        target.style.opacity = '1';
+                    } else {
+                        target.style.filter = 'blur(2px)';
+                        target.style.opacity = '0.35';
+                    }
+                });
+            }
+
+            // Fungsi untuk menggerakkan bingkai secara otomatis (bolak-balik)
+            function startAutoMove() {
+                if (autoMoveInterval) clearInterval(autoMoveInterval);
+
+                autoMoveInterval = setInterval(() => {
+                    if (targets.length === 0) return;
+
+                    // Pindahkan bingkai ke elemen aktif
+                    moveFrame(targets[currentIndex]);
+
+                    // Tentukan indeks berikutnya
+                    if (currentIndex === targets.length - 1) {
+                        direction = -1; // Capai paling kanan -> balik arah ke kiri
+                    } else if (currentIndex === 0) {
+                        direction = 1;  // Capai paling kiri -> balik arah ke kanan
+                    }
+
+                    currentIndex += direction;
+                }, 1800); // Bergerak otomatis setiap 1.8 detik
+            }
+
+            function stopAutoMove() {
+                if (autoMoveInterval) {
+                    clearInterval(autoMoveInterval);
+                    autoMoveInterval = null;
+                }
+            }
+
+            // Event handler saat kursor masuk ke opsi target
+            targets.forEach((target, index) => {
+                target.addEventListener('mouseenter', () => {
+                    stopAutoMove(); // Hentikan pergerakan otomatis
+                    currentIndex = index; // Update indeks ke target yang di-hover
+                    moveFrame(target);
+                });
+            });
+
+            // Jalankan kembali otomatis saat kursor keluar dari area container
+            container.addEventListener('mouseleave', () => {
+                startAutoMove();
+            });
+
+            // Inisialisasi awal
+            if (targets.length > 0) {
+                moveFrame(targets[0]);
+                startAutoMove();
+            }
         });
-        
     </script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-slate-900 relative overflow-x-hidden">
@@ -140,12 +217,12 @@
     <header class="fixed top-0 left-0 w-full z-50 glass-nav">
         <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
             <a href="#about" class="text-xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
-                TP.
+                Tommy Poernomo.
             </a>
             <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-                <a href="#about" class="hover:text-cyan-400 transition-colors">Tentang</a>
+                <a href="#about" class="hover:text-cyan-400 transition-colors">About</a>
                 <a href="#experience" class="hover:text-cyan-400 transition-colors">Pengalaman</a>
-                <a href="#education" class="hover:text-cyan-400 transition-colors">Pendidikan</a>
+                <a href="#education" class="hover:text-cyan-400 transition-colors">Education</a>
                 <a href="#skills" class="hover:text-cyan-400 transition-colors">Keahlian</a>
                 <a href="#contact" class="hover:text-cyan-400 transition-colors">Kontak</a>
             </nav>
@@ -178,30 +255,48 @@
                     <div class="flex gap-3 w-full md:w-auto">
                         <a href="https://www.linkedin.com/in/tommy-poernomo/" target="_blank" rel="noopener noreferrer" 
                            class="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm transition-all shadow-lg shadow-blue-600/30">
-                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                            <i class="fa-brands fa-linkedin text-base"></i>
                             LinkedIn Profile
                         </a>
-                        <a href="#contact" class="glass-pill px-4 py-2.5 rounded-xl text-slate-200 hover:bg-white/10 text-sm font-medium transition-all flex items-center justify-center">
-                            <i data-lucide="mail" class="w-4 h-4"></i>
+                        <a href="mailto:tommy.poernomo@gmail.com" class="glass-pill px-4 py-2.5 rounded-xl text-slate-200 hover:bg-white/10 text-sm font-medium transition-all flex items-center justify-center">
+                            <i class="fa-solid fa-envelope text-base"></i>
+                            &nbsp;Mail Me
                         </a>
                     </div>
                 </div>
 
                 <!-- Main Headlines -->
-                <div class="space-y-3">
+                <div class="space-y-4">
                     <div>
                         <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight typing-container"><span id="typing-text"></span><span class="cursor">|</span></h1>
-                        <p class="text-lg text-cyan-400 font-medium mt-1">Professional / Specialist / Educator</p>
+                        
+                        <!-- Container untuk Target Frame Siku -->
+                        <div id="target-container" class="relative flex flex-wrap gap-2 items-center mt-3 py-1">
+                            <span class="role-target inline-block text-sm md:text-base font-semibold text-cyan-400 cursor-pointer transition-all duration-300 py-1.5 px-3">
+                                Front End Developer
+                            </span>
+                            <span class="role-target inline-block text-sm md:text-base font-semibold text-cyan-400 cursor-pointer transition-all duration-300 py-1.5 px-3">
+                                Full Stack Software Engineer
+                            </span>
+                            <span class="role-target inline-block text-sm md:text-base font-semibold text-cyan-400 cursor-pointer transition-all duration-300 py-1.5 px-3">
+                                Educator
+                            </span>
+
+                            <!-- Frame Siku Melayang -->
+                            <div id="focus-frame" class="corner-box opacity-0"></div>
+                        </div>
                     </div>
-                    <p class="text-slate-400 text-sm md:text-base leading-relaxed max-w-2xl">
+
+                    <div class="text-slate-400 text-sm md:text-base leading-relaxed max-w-2xl space-y-3">
                         <p>I am an aspiring Software Engineer with a multidisciplinary background shaped by education, who values clarity, structured thinking, and continuous learning while building functional, high-impact web solutions.</p>
-                        <p>At SMK Negeri 1 Berau (Vocational High School Negeri 1 Berau), I have spent more than 10 years building structured analysis and problem-solving skills through organizing learning activities in collaboration with the school leadership. I managed the DKV teacher team and collaborated with the Vice Principal for Curriculum to design shared lesson plans, ensuring structured execution and alignment across stakeholders.</p> 
+                        <p>At SMK Negeri 1 Berau (State Vocational High School 1 Berau), I have spent more than 10 years building structured analysis and problem-solving skills through organizing learning activities in collaboration with the school leadership. I managed the DKV teacher team and collaborated with the Vice Principal for Curriculum to design shared lesson plans, ensuring structured execution and alignment across stakeholders.</p> 
                         <p>Through this transition, I sharpen software engineering skills in HTML, CSS, JavaScript, React, and Nest JS while strengthening adaptability and structured communication to respond effectively to fast-changing technologies. </p>
-                         <p>My uncommon mix of domain knowledge and educator-driven work mindset, combined with a commitment to writing clean, maintainable code, positions me to contribute immediately as a Software Engineer.</p>
-                    </p>
+                        <p>My uncommon mix of domain knowledge and educator-driven work mindset, combined with a commitment to writing clean, maintainable code, positions me to contribute immediately as a Software Engineer.</p>
+                    </div>
+
                     <div class="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-slate-400 pt-2 border-t border-white/5">
-                        <span class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-400"></i> Indonesia</span>
-                        <span class="flex items-center gap-1.5"><i data-lucide="briefcase" class="w-3.5 h-3.5 text-cyan-400"></i> Open to Opportunities</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-location-dot text-cyan-400"></i> Indonesia</span>
+                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-briefcase text-cyan-400"></i> Open to Opportunities</span>
                     </div>
                 </div>
             </div>
@@ -210,7 +305,7 @@
         <!-- ABOUT / SUMMARY SECTION -->
         <section class="glass-card rounded-2xl p-6 md:p-8 space-y-4">
             <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                <i data-lucide="user" class="w-5 h-5 text-cyan-400"></i>
+                <i class="fa-solid fa-user text-cyan-400"></i>
                 Ringkasan Profesional
             </h2>
             <p class="text-slate-300 leading-relaxed text-sm md:text-base">
@@ -218,70 +313,122 @@
             </p>
         </section>
 
+        <!-- EDUCATION SECTION -->
+        <section id="education" class="glass-card rounded-2xl p-6 md:p-8 space-y-6">
+            <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap text-cyan-400"></i>
+                Education
+            </h2>
+            <div class="space-y-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-white/5 gap-1">
+                    <div>
+                        <h3 class="text-base font-semibold text-white">Full Stack Software Engineering</h3>
+                        <p class="text-sm text-slate-400"><a href="https://www.revou.co/id/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">RevoU</a></p>
+                    </div>
+                    <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                        <span class="text-xs font-medium text-cyan-400 glass-pill px-3 py-1 rounded-full border border-cyan-500/20">Completed</span>
+                        <span class="text-xs font-medium text-cyan-400 glass-pill px-3 py-1 rounded-full border border-cyan-500/20">Oct 2025 - May 2026</span>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
+                    <div>
+                        <h3 class="text-base font-semibold text-white">Bachelor of Applied Science, Information Technology</h3>
+                        <p class="text-sm text-slate-400"><a href="https://www.pens.ac.id/" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">Electronic Engineering Polytechnic Institute of Surabaya (PENS-ITS)</a></p>
+                    </div>
+                    <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                        <span class="text-xs font-medium text-cyan-400 glass-pill px-3 py-1 rounded-full border border-cyan-500/20">Graduated</span>
+                        <span class="text-xs font-medium text-cyan-400 glass-pill px-3 py-1 rounded-full border border-cyan-500/20">Sep 2024 - Aug 2008</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- EXPERIENCE SECTION -->
         <section id="experience" class="glass-card rounded-2xl p-6 md:p-8 space-y-6">
             <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                <i data-lucide="briefcase" class="w-5 h-5 text-cyan-400"></i>
-                Pengalaman Kerja
+                <i class="fa-solid fa-briefcase text-cyan-400"></i>
+                Working Experiences
             </h2>
 
             <div class="space-y-8 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-white/10">
-                
-                <!-- Item 1 -->
                 <div class="relative pl-10 group">
                     <div class="absolute left-0 top-1.5 w-7 h-7 rounded-full glass-pill border border-cyan-400/50 flex items-center justify-center group-hover:scale-110 transition-transform bg-slate-950">
                         <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-white">Senior Specialist / Educator</h3>
-                        <p class="text-sm text-cyan-400 font-medium">Instansi / Perusahaan Utama</p>
-                        <p class="text-xs text-slate-400 mt-0.5 mb-3">2021 - Sekarang · Full-time</p>
+                        <h3 class="text-lg font-semibold text-white">Head of DKV Laboratory</h3>
+                        <p class="text-sm text-cyan-400 font-medium">SMKN 1 Berau</p>
+                        <p class="text-xs text-slate-400 mt-0.5 mb-3">Jul 2021 - Present · Full-time</p>
                         <p class="text-slate-300 text-sm leading-relaxed">
-                            Memimpin pelaksanaan asesmen kompetensi, pengembangan kurikulum teknis, serta pengelolaan infrastruktur digital untuk optimalisasi proses belajar dan penilaian.
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Handled routine hardware maintenance and software updates on lab computers, minimizing technical glitches and preventing interruptions during practical exams or classes.</li>
+                                <li>Supervised the daily schedule and access rules for the DKV lab, ensuring different classes and student groups could practice smoothly without any resource conflicts. </li>
+                                <li>Assessed lab hardware performance and recommended technical upgrades when needed, helping the school make informed choices on purchasing reliable parts like RAM and storage. </li>
+                                <li>Maintained the lab's local network stability to ensure seamless file-sharing between student computers and the main instructor PC, speeding up the assignment collection process.</li>
+                            </ul>                        
                         </p>
                     </div>
                 </div>
 
-                <!-- Item 2 -->
+<div class="relative pl-10 group">
+                    <div class="absolute left-0 top-1.5 w-7 h-7 rounded-full glass-pill border border-cyan-400/50 flex items-center justify-center group-hover:scale-110 transition-transform bg-slate-950">
+                        <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-white">Competency Test Assessor (Asesor UKK/USK)</h3>
+                        <p class="text-sm text-cyan-400 font-medium">SMKN 1 Berau</p>
+                        <p class="text-xs text-slate-400 mt-0.5 mb-3">Dec 2022 - Present · Seasonal</p>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Evaluated student practical exams based on national competency standards for "Junior Photographer" and "Junior Graphic Design Operator" occupations, ensuring all passing students met real-world industry requirements. </li>
+                                <li>Conducted fair and objective grading on students' digital imaging portfolios and technical photography setups, maintaining a high standard of integrity throughout the certification process. </li>
+                                <li>Reviewed and simulated real-world design and photography briefs for the exam, giving students a practical test environment that closely mirrored client expectations in the creative industry. </li>
+                                <li>Evaluated students' work ethics, safety compliance (K3), and equipment handling during practical sessions, instilling professional workplace habits required by major creative agencies.  </li>
+                            </ul>                        
+                        </p>
+                    </div>
+                </div>
+
                 <div class="relative pl-10 group">
-                    <div class="absolute left-0 top-1.5 w-7 h-7 rounded-full glass-pill border border-slate-600 flex items-center justify-center group-hover:scale-110 transition-transform bg-slate-950">
-                        <div class="w-2 h-2 rounded-full bg-slate-400"></div>
+                    <div class="absolute left-0 top-1.5 w-7 h-7 rounded-full glass-pill border border-cyan-400/50 flex items-center justify-center group-hover:scale-110 transition-transform bg-slate-950">
+                        <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
                     </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-white">Web Developer / Technical Assessor</h3>
-                        <p class="text-sm text-cyan-400 font-medium">Lembaga Sertifikasi / Project Team</p>
-                        <p class="text-xs text-slate-400 mt-0.5 mb-3">2018 - 2021</p>
+                        <h3 class="text-lg font-semibold text-white">Head of DKV</h3>
+                        <p class="text-sm text-cyan-400 font-medium">SMKN 1 Berau</p>
+                        <p class="text-xs text-slate-400 mt-0.5 mb-3">Jul 2014 - Jun 2024 · Full-time</p>
                         <p class="text-slate-300 text-sm leading-relaxed">
-                            Mengembangkan aplikasi sistem informasi web interaktif serta bertindak sebagai penguji independen dalam uji kompetensi teknis nasional.
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Managed the distribution of teaching hours for DKV teachers, ensuring full compliance with national education requirements and zero scheduling conflicts throughout the academic year.</li>
+                                <li> 
+Coordinated with local creative industries to secure internship (PKL) placements, matching each student’s technical skills and character with company demands to achieve a high internship completion rate. </li>
+                                <li>
+Collaborated with the Vice Principal of Curriculum to synchronize course materials with local industry standards, keeping the DKV learning modules relevant to current professional trends. </li>
+                                <li>
+Assessed and proposed the annual budget for practical tools and materials, ensuring students always had the necessary resources and equipment for their daily/weekly/monhtly projects. 
+</li>
+                            </ul>                        
                         </p>
                     </div>
                 </div>
 
-            </div>
-        </section>
-
-        <!-- EDUCATION SECTION -->
-        <section id="education" class="glass-card rounded-2xl p-6 md:p-8 space-y-6">
-            <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                <i data-lucide="graduation-cap" class="w-5 h-5 text-cyan-400"></i>
-                Pendidikan & Pelatihan
-            </h2>
-
-            <div class="space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-4 border-b border-white/5 gap-1">
-                    <div>
-                        <h3 class="text-base font-semibold text-white">Sarjana / Diploma Terkait</h3>
-                        <p class="text-sm text-slate-400">Universitas / Perguruan Tinggi</p>
+                <div class="relative pl-10 group">
+                    <div class="absolute left-0 top-1.5 w-7 h-7 rounded-full glass-pill border border-cyan-400/50 flex items-center justify-center group-hover:scale-110 transition-transform bg-slate-950">
+                        <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
                     </div>
-                    <span class="text-xs font-medium text-cyan-400 glass-pill px-3 py-1 rounded-full border border-cyan-500/20">Lulus</span>
-                </div>
-
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1">
                     <div>
-                        <h3 class="text-base font-semibold text-white">Sertifikasi Competency Assessor & Fullstack Web Development</h3>
-                        <p class="text-sm text-slate-400">LSP / RevoU / Lembaga Pelatihan Terakreditasi</p>
+                        <h3 class="text-lg font-semibold text-white">IT/Graphic Design Educator</h3>
+                        <p class="text-sm text-cyan-400 font-medium">SMKN 1 Berau</p>
+                        <p class="text-xs text-slate-400 mt-0.5 mb-3">Jul 2012 - Present · Full-time</p>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Monitored student attendance and daily lab discipline, fostering a professional work ethic and accountability that prepared students for the actual workplace environment. </li>
+                                <li>Taught core DKV subjects, including graphic design and photography, which equipped students with the essential technical skills needed to clear their internship (PKL) requirements. </li>
+                                <li>Developed structured learning materials and student worksheets (LKPD) based on industry-standard software like Adobe Photoshop, resulting in higher student engagement during practical lab sessions. </li>
+                                <li>Integrated real-world design briefs into classroom assignments, giving students a realistic understanding of client demands and professional deadlines. </li>
+                            </ul>                        
+                        </p>
                     </div>
-                    <span class="text-xs font-medium text-slate-400 glass-pill px-3 py-1 rounded-full">Sertifikasi</span>
                 </div>
             </div>
         </section>
@@ -289,15 +436,14 @@
         <!-- SKILLS SECTION -->
         <section id="skills" class="glass-card rounded-2xl p-6 md:p-8 space-y-6">
             <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                <i data-lucide="code" class="w-5 h-5 text-cyan-400"></i>
+                <i class="fa-solid fa-code text-cyan-400"></i>
                 Keahlian & Kompetensi
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Tech Skills -->
                 <div class="glass-card p-4 rounded-xl space-y-3">
                     <h3 class="text-sm font-semibold text-cyan-300 flex items-center gap-2">
-                        <i data-lucide="cpu" class="w-4 h-4"></i> Web & Tech Stack
+                        <i class="fa-solid fa-microchip"></i> Web & Tech Stack
                     </h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="glass-pill px-3 py-1 rounded-lg text-xs font-medium text-slate-200">HTML5 / CSS3</span>
@@ -308,10 +454,9 @@
                     </div>
                 </div>
 
-                <!-- Soft / Professional Skills -->
                 <div class="glass-card p-4 rounded-xl space-y-3">
                     <h3 class="text-sm font-semibold text-cyan-300 flex items-center gap-2">
-                        <i data-lucide="award" class="w-4 h-4"></i> Professional Skills
+                        <i class="fa-solid fa-award"></i> Professional Skills
                     </h3>
                     <div class="flex flex-wrap gap-2">
                         <span class="glass-pill px-3 py-1 rounded-lg text-xs font-medium text-slate-200">Asesmen Kompetensi</span>
@@ -333,15 +478,15 @@
             <div class="flex justify-center gap-4">
                 <a href="https://www.linkedin.com/in/tommy-poernomo/" target="_blank" rel="noopener noreferrer"
                    class="glass-pill p-3 rounded-xl hover:bg-cyan-500/20 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all">
-                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                    <i class="fa-brands fa-linkedin text-xl"></i>
                 </a>
-                <a href="mailto:email@example.com" 
+                <a href="mailto:tommy.poernomo@gmail.com" 
                    class="glass-pill p-3 rounded-xl hover:bg-cyan-500/20 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all">
-                    <i data-lucide="mail" class="w-5 h-5"></i>
+                    <i class="fa-solid fa-envelope text-xl"></i>
                 </a>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+                <a href="https://github.com/Tommy-Poernomo/" target="_blank" rel="noopener noreferrer"
                    class="glass-pill p-3 rounded-xl hover:bg-cyan-500/20 hover:border-cyan-500/40 text-slate-300 hover:text-cyan-400 transition-all">
-                    <i data-lucide="github" class="w-5 h-5"></i>
+                    <i class="fa-brands fa-github text-xl"></i>
                 </a>
             </div>
 
@@ -351,10 +496,5 @@
         </footer>
 
     </main>
-
-    <!-- Lucide Icons Script Initialization -->
-    <script>
-        lucide.createIcons();
-    </script>
 </body>
 </html>
