@@ -30,7 +30,104 @@
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
+        
+        .typing-container {
+        font-family: monospace;
+        font-size: 1.5rem;
+        color: #06b6d4; /* Warna cyan */
+    }
+
+    /* Efek kedip pada kursor */
+    .cursor {
+        display: inline-block;
+        animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
     </style>
+    <script>
+//         const textElement = document.getElementById("typing-text");
+// const textToType = "Hello, I'm Tommy Poernomo, welcome to my Portfolio";
+// let index = 0;
+
+// function typeEffect() {
+//     if (index < textToType.length) {
+//         textElement.textContent += textToType.charAt(index);
+//         index++;
+//         setTimeout(typeEffect, 80); // Kecepatan mengetik (ms)
+//     }
+// }
+
+// // Jalankan fungsi saat halaman selesai dimuat
+// document.addEventListener("DOMContentLoaded", typeEffect);
+
+// document.addEventListener("DOMContentLoaded", () => {
+//             const textElement = document.getElementById("typing-text");
+//             const textToType = "Hello, I'm Tommy Poernomo, welcome to my Portfolio";
+//             let index = 0;
+
+//             function typeEffect() {
+//                 if (textElement && index < textToType.length) {
+//                     textElement.textContent += textToType.charAt(index);
+//                     index++;
+//                     setTimeout(typeEffect, 80); // Kecepatan mengetik (ms)
+//                 }
+//             }
+
+//             typeEffect();
+//         });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const textElement = document.getElementById("typing-text");
+            const phrases = [
+                "Hello, I'm Tommy Poernomo",
+                "Welcome to my Portfolio"
+            ];
+            
+            let phraseIndex = 0;
+            let charIndex = 0;
+            let isDeleting = false;
+
+            function typeEffect() {
+                if (!textElement) return;
+
+                const currentPhrase = phrases[phraseIndex];
+
+                if (isDeleting) {
+                    // Proses Menghapus
+                    textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                    charIndex--;
+                } else {
+                    // Proses Mengetik
+                    textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                    charIndex++;
+                }
+
+                // Kecepatan default: Mengetik (100ms), Menhapus (50ms)
+                let typingSpeed = isDeleting ? 50 : 100;
+
+                // Jika kalimat selesai diketik penuh
+                if (!isDeleting && charIndex === currentPhrase.length) {
+                    typingSpeed = 2000; // Tahan selama 2 detik sebelum mulai menghapus
+                    isDeleting = true;
+                } 
+                // Jika kalimat selesai dihapus total
+                else if (isDeleting && charIndex === 0) {
+                    isDeleting = false;
+                    phraseIndex = (phraseIndex + 1) % phrases.length; // Pindah ke kalimat berikutnya
+                    typingSpeed = 500; // Jeda sebentar sebelum mengetik kalimat baru
+                }
+
+                setTimeout(typeEffect, typingSpeed);
+            }
+
+            typeEffect();
+        });
+        
+    </script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-cyan-500 selection:text-slate-900 relative overflow-x-hidden">
 
@@ -93,12 +190,14 @@
                 <!-- Main Headlines -->
                 <div class="space-y-3">
                     <div>
-                        <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight">Tommy Poernomo</h1>
+                        <h1 class="text-3xl md:text-4xl font-bold text-white tracking-tight typing-container"><span id="typing-text"></span><span class="cursor">|</span></h1>
                         <p class="text-lg text-cyan-400 font-medium mt-1">Professional / Specialist / Educator</p>
                     </div>
                     <p class="text-slate-400 text-sm md:text-base leading-relaxed max-w-2xl">
                         <p>I am an aspiring Software Engineer with a multidisciplinary background shaped by education, who values clarity, structured thinking, and continuous learning while building functional, high-impact web solutions.</p>
-                        <p>At SMK Negeri 1 Berau (Vocational High School Negeri 1 Berau), I have spent more than 10 years building structured analysis and problem-solving skills through organizing learning activities in collaboration with the school leadership. I managed the DKV teacher team and collaborated with the Vice Principal for Curriculum to design shared lesson plans, ensuring structured execution and alignment across stakeholders.</p> Through this transition, I sharpen software engineering skills in HTML, CSS, JavaScript, React, and Nest JS while strengthening adaptability and structured communication to respond effectively to fast-changing technologies. My uncommon mix of domain knowledge and educator-driven work mindset, combined with a commitment to writing clean, maintainable code, positions me to contribute immediately as a Software Engineer.
+                        <p>At SMK Negeri 1 Berau (Vocational High School Negeri 1 Berau), I have spent more than 10 years building structured analysis and problem-solving skills through organizing learning activities in collaboration with the school leadership. I managed the DKV teacher team and collaborated with the Vice Principal for Curriculum to design shared lesson plans, ensuring structured execution and alignment across stakeholders.</p> 
+                        <p>Through this transition, I sharpen software engineering skills in HTML, CSS, JavaScript, React, and Nest JS while strengthening adaptability and structured communication to respond effectively to fast-changing technologies. </p>
+                         <p>My uncommon mix of domain knowledge and educator-driven work mindset, combined with a commitment to writing clean, maintainable code, positions me to contribute immediately as a Software Engineer.</p>
                     </p>
                     <div class="flex flex-wrap items-center gap-y-2 gap-x-4 text-xs text-slate-400 pt-2 border-t border-white/5">
                         <span class="flex items-center gap-1.5"><i data-lucide="map-pin" class="w-3.5 h-3.5 text-cyan-400"></i> Indonesia</span>
