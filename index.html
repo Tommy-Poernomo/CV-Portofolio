@@ -571,8 +571,11 @@
 
             <!-- Tab Navigation Buttons -->
             <div class="flex flex-wrap gap-2 sm:gap-3 border-b border-white/10 pb-4">
-                <button class="tab-btn active glass-pill px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-xs font-semibold transition-all border border-white/10 hover:border-cyan-400/50" data-tab="prd-implementation">
-                    <i class="fa-solid fa-graduation-cap mr-1"></i> PRD Implementation
+                <button class="tab-btn active glass-pill px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-xs font-semibold transition-all border border-white/10 hover:border-cyan-400/50" data-tab="virtual-internship">
+                    <i class="fa-solid fa-briefcase mr-1"></i> Virtual Internship
+                </button>
+                <button class="tab-btn glass-pill px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-xs font-semibold transition-all border border-white/10 hover:border-cyan-400/50" data-tab="prd-implementation">
+                    <i class="fa-solid fa-file-lines mr-1"></i> PRD Implementation
                 </button>
                 <button class="tab-btn glass-pill px-3 py-2 sm:px-4 sm:py-2 rounded-xl text-xs font-semibold transition-all border border-white/10 hover:border-cyan-400/50" data-tab="dkv-lms-project">
                     <i class="fa-solid fa-graduation-cap mr-1"></i> DKV LMS
@@ -585,8 +588,32 @@
                 </button>
             </div>
 
+<!-- Tab Content 1 new: Virtual Internship -->
+            <div id="virtual-internship" class="tab-content transition-all duration-300">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <figure class="overflow-hidden rounded-xl border border-white/10 glass-card">
+                        <img src="preview/preview-virtual-internship.png" alt="Preview of Virtual Internship" loading="lazy" class="w-full h-44 sm:h-48 object-cover hover:scale-105 transition-transform duration-500">
+                        <figcaption class="text-xs text-center text-slate-400 py-2 border-t border-white/5 bg-slate-950/40">Virtual Internship with Mamabear</figcaption>
+                    </figure>
+
+                    <article class="space-y-4">
+                        <h3 class="text-base sm:text-lg font-semibold text-white">Virtual Internship</h3>
+                        <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                            MamaBear is an e-commerce platform providing nutritional support products for pregnancy and lactation. In this project, the platform was enhanced with an AI Chat-Assistant to help customers interactively consult and discover suitable products, built with Next.js and React on the front-end alongside NestJS and PostgreSQL on the back-end. As a frontend development team member, my contribution focused on building and maintaining interactive UI components, including resolving a bug fix in the promotional input logic by implementing a dynamic toggle between percentage and fixed nominal values, ensuring strict data validation and a seamless user experience within the promotion module.
+                        </p>
+                        <div>
+                            <a href="https://mamabear-frontend-theta.vercel.app/" 
+                               target="_blank" rel="noopener noreferrer" 
+                               class="inline-flex items-center gap-2 glass-pill px-4 py-2.5 rounded-xl text-cyan-300 hover:bg-cyan-500/20 hover:border-cyan-500/40 text-xs font-medium transition-all">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open VI Mamabear Project
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+
 <!-- Tab Content 1: PRD Implementation -->
-            <div id="prd-implementation" class="tab-content transition-all duration-300">
+            <div id="prd-implementation" class="tab-content hidden transition-all duration-300">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                     <figure class="overflow-hidden rounded-xl border border-white/10 glass-card">
                         <img src="preview/preview-prd-implementation.jpg" alt="Preview of PRD Implementation" loading="lazy" class="w-full h-44 sm:h-48 object-cover hover:scale-105 transition-transform duration-500">
